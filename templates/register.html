@@ -5,16 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="static/css/login.css">
 </head>
 <body>
-    <h1>Registrar</h1>
-    
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        {{ form.username() }}
-        {{ form.password() }}
-        {{ form.submit() }}
-
+    <div class="container">
+        <h1>Registrar</h1>
+        
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.username() }}
+            {{ form.password() }}
+            {{ form.submit() }}
+        </form>
     <a href="{{url_for('login')}}">Já tenho uma conta</a><br>
+    </div>
 </body>
 </html>
