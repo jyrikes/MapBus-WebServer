@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações de Rotas</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+        }
+    
+        .sidebar {
+            width: 200px;
+            background-color: #15202b;
+            /* Azul escuro */
+            padding: 20px;
+            height: 100vh;
+            /* Ocupa toda a altura vertical da página */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Centraliza os botões verticalmente */
+        }
+    
+        .sidebar a {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffffff;
+            /* Letras brancas */
+            text-decoration: none;
+            transition: background-color 0.3s;
+            /* Transição suave da cor de fundo */
+        }
+    
+        .sidebar a:hover {
+            background-color: #007bff;
+            /* Azul claro quando passa o mouse */
+        }
+    
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+    
+        .route-box {
+            background-color: #007bff;
+            /* Azul claro */
+            color: #ffffff;
+            /* Letras brancas */
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+    
+        .carousel {
+            display: flex;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+    
+        .carousel-item {
+            flex: 0 0 300px;
+            height: 200px;
+            margin-right: 10px;
+            scroll-snap-align: start;
+        }
+    
+        .path {
+            width: 100%;
+            height: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+    
+        .path-inner {
+            width: 50%;
+            height: 100%;
+            background-color: #007bff;
+            /* Azul claro */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <a href="{{url_for('home')}}">Home</a>
+        <a href="{{url_for('mapa')}}">Mapa</a>
+        <a href="{{url_for('rotas')}}">Rotas</a>
+        <a href="{{url_for('logout')}}">Sair</a>
+    </div>
+    <div class="content">
+        <h1>Informações de Rotas</h1>
+        <a href="{{url_for('logout')}}">Sair</a>
+        <div class="carousel">
+            <div class="carousel-item">
+                <div class="route-box">
+                    <h3>Rota UABJ para AEB</h3>
+                    <p>Horários:</p>
+                    <ul>
+                        <li>Partida: 8:00, 10:00, 12:00</li>
+                        <li>Chegada: 8:30, 10:30, 12:30</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="route-box">
+                    <h3>Rota UABJ para AEB - Expressa</h3>
+                    <p>Horários:</p>
+                    <ul>
+                        <li>Partida: 9:00, 11:00, 13:00</li>
+                        <li>Chegada: 9:30, 11:30, 13:30</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="route-box">
+                    <h3>Rota UABJ para AEB - Noturna</h3>
+                    <p>Horários:</p>
+                    <ul>
+                        <li>Partida: 19:00, 21:00, 23:00</li>
+                        <li>Chegada: 19:30, 21:30, 23:30</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="path">
+            <div class="path-inner"></div>
+        </div>
+    </div>
+    <script>
+        const carousel = document.querySelector('.carousel');
+        const items = document.querySelectorAll('.carousel-item');
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        carousel.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - carousel.offsetLeft;
+            scrollLeft = carousel.scrollLeft;
+            carousel.classList.add('active');
+        });
+
+        carousel.addEventListener('mouseleave', () => {
+            isDown = false;
+            carousel.classList.remove('active');
+        });
+
+        carousel.addEventListener('mouseup', () => {
+            isDown = false;
+            carousel.classList.remove('active');
+        });
+
+        carousel.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - carousel.offsetLeft;
+            const walk = (x - startX) * 3; // Adjust scrolling speed
+            carousel.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+</body>
+
+</html>
