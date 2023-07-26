@@ -5,9 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-import sqlite3
-
-
+import BancoDeDados as bd
 
 app = Flask(__name__, template_folder='templates')
 bcrypt = Bcrypt(app)
@@ -51,71 +49,6 @@ class LoginForm(FlaskForm):
         min=4, max=20)], render_kw={"placeholder": "Senha"})
     submit = SubmitField("Entrar")
 
-class BancoDeDados:
-    def __init__(self, database_name='banco_de_dados.db'):
-        self.database_name = database_name
-        self.connection = sqlite3.connect(database_name)
-        self.cursor = self.connection.cursor()
-
-    def criar_tabelas(self):
-        try:
-            # Cria a tabela "Rotas"
-            create_rotas_table_query = """
-            CREATE TABLE IF NOT EXISTS Rotas (
-                ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                Nome VARCHAR(100) NOT NULL,
-                Pontos TEXT NOT NULL
-            )
-            """
-            self.cursor.execute(create_rotas_table_query)
-
-            # Cria a tabela "PosicoesUsuarios"
-            create_posicoes_usuarios_table_query = """
-            CREATE TABLE IF NOT EXISTS PosicoesUsuarios (
-                ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                Latitude DECIMAL(10, 8) NOT NULL,
-                Longitude DECIMAL(11, 8) NOT NULL,
-                Horario DATETIME NOT NULL,
-                Rota_ID INT NOT NULL,
-                FOREIGN KEY (Rota_ID) REFERENCES Rotas(ID)
-            )
-            """
-            self.cursor.execute(create_posicoes_usuarios_table_query)
-
-            print("Tabelas criadas com sucesso!")
-        except sqlite3.Error as error:
-            print(f"Erro ao criar tabelas: {error}")
-
-    def inserir_posicao(self, latitude, longitude, horario, rota_id):
-        try:
-            # Insere a posição na tabela "PosicoesUsuarios"
-            sql_query = "INSERT INTO PosicoesUsuarios (Latitude, Longitude, Horario, Rota_ID) VALUES (?, ?, ?, ?)"
-            data = (latitude, longitude, horario, rota_id)
-            self.cursor.execute(sql_query, data)
-            self.connection.commit()
-            print("Posição do usuário inserida com sucesso!")
-        except sqlite3.Error as error:
-            print(f"Erro ao inserir posição do usuário: {error}")
-
-    def get_posicao(self, posicao_id):
-        try:
-            # Busca a posição do usuário pelo ID
-            sql_query = "SELECT Latitude, Longitude, Horario, Rota_ID FROM PosicoesUsuarios WHERE ID = ?"
-            data = (posicao_id,)
-            self.cursor.execute(sql_query, data)
-            posicao = self.cursor.fetchone()
-            if posicao:
-                latitude, longitude, horario, rota_id = posicao
-                print(f"Latitude: {latitude}, Longitude: {longitude}, Horário: {horario}, Rota ID: {rota_id}")
-            else:
-                print(f"Posição com ID {posicao_id} não encontrada.")
-        except sqlite3.Error as error:
-            print(f"Erro ao buscar posição: {error}")
-
-    def __del__(self):
-        # Fecha a conexão ao destruir a instância da classe
-        self.cursor.close()
-        self.connection.close()
 
 @app.route('/')
 @login_required
@@ -156,23 +89,43 @@ def mapa():
 @app.route('/rotas')
 @login_required
 def rotas():
-    banco = BancoDeDados()
+    banco = bd.BancoDeDados()
     banco.criar_tabelas()
-    
+
     # Exemplo de uso das funções
     latitude_usuario = -22.9083
     longitude_usuario = -43.1964
     horario_usuario = "2023-07-21 12:34:56"
     rota_id_usuario = 1
-    
-    banco.inserir_posicao(latitude_usuario, longitude_usuario, horario_usuario, rota_id_usuario )
+
+    banco.inserir_posicao(latitude_usuario, longitude_usuario,
+                          horario_usuario, rota_id_usuario)
 
     # Busca os dados da tabela "PosicoesUsuarios"
     banco.cursor.execute("SELECT * FROM PosicoesUsuarios")
     posicoes = banco.cursor.fetchall()
 
+    # Busca os dados da tabela "Rotas"
+    rota1 = banco.get_parada('Rota da manhã')
+    print(rota1)
+
+    # Função para determinar o turno com base no horário
+    def posicao_turno(horario):
+        if horario is not None:
+            if horario.split()[1] < '12:00:00':
+                return 'manha'
+            elif horario.split()[1] < '18:00:00':
+                return 'tarde'
+            else:
+                return 'noite'
+        return None
+
+    # Coloque aqui a variável que armazena o turno selecionado (manha, tarde, noite)
+    # Por exemplo, você pode mudar para 'tarde' ou 'noite' conforme a seleção do usuário
+    selected_content = 'manha'
+
     banco.__del__()
-    return render_template('rotas.html', posicoes=posicoes)
+    return render_template('rotas.html', posicoes=posicoes, rota1=rota1, posicao_turno=posicao_turno, selected_content=selected_content)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -180,7 +133,8 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
         new_user = User(username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
@@ -191,9 +145,5 @@ def register():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    banco = BancoDeDados()
+    banco = bd.BancoDeDados()
     banco.criar_tabelas()
-
-
-    
-    
