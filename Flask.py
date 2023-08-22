@@ -27,18 +27,22 @@ class Rota(Resource):
     def get(self):
         if request.is_json:
             data = request.get_json()
-            auto = data.get('auto', 'default_auto')
-            ponto = data.get('ponto', 'default_ponto')
+            hora = data.get('Hora', 'default_hora')
+            latitude = data.get('Latitude', 'default_latitude')
+            longitude = data.get('Longitude', 'default_longitude')
+            local = data.get('local', 'default_local')
         else:
-            auto = request.args.get('auto', 'default_auto')
-            ponto = request.args.get('ponto', 'default_ponto')
-        return render_template('rota.html', auto=auto, ponto=ponto)
+            hora = request.args.get('Hora', 'default_hora')
+            latitude = request.args.get('Latitude', 'default_latitude')
+            longitude = request.args.get('Longitude', 'default_longitude')
+            local = request.args.get('local', 'default_local')
+        return render_template('rota.html', hora=hora, latitude=latitude, longitude=longitude, local=local)
 
 api.add_resource(Rota, "/rota")
 
-@app.route("/rota_page/<string:auto>/<string:ponto>")
-def rota_page(auto, ponto):
-    return render_template('rota.html', auto=auto, ponto=ponto)
+@app.route("/rota_page/<string:hora>/<string:latitude>/<string:longitude>/<string:local>")
+def rota_page(hora, latitude, longitude, local):
+    return render_template('rota.html', hora=hora, latitude=latitude, longitude=longitude, local=local)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
