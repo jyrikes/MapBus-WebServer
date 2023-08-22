@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, request
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
@@ -23,11 +23,22 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-class HelloWorld(Resource):
-    def get(self, auto, ponto):
-        return {"auto": auto, "ponto": ponto}
+class Rota(Resource):
+    def get(self):
+        if request.is_json:
+            data = request.get_json()
+            auto = data.get('auto', 'default_auto')
+            ponto = data.get('ponto', 'default_ponto')
+        else:
+            auto = request.args.get('auto', 'default_auto')
+            ponto = request.args.get('ponto', 'default_ponto')
+        return render_template('rota.html', auto=auto, ponto=ponto)
 
-api.add_resource(HelloWorld, "/helloworld/<string:auto>/<string:ponto>")    
+api.add_resource(Rota, "/rota")
+
+@app.route("/rota_page/<string:auto>/<string:ponto>")
+def rota_page(auto, ponto):
+    return render_template('rota.html', auto=auto, ponto=ponto)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
