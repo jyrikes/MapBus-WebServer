@@ -1,47 +1,55 @@
-from flask import Flask, request, jsonify
-
+from flask import Flask, render_template, request, jsonify
 from flask_pydantic_spec import FlaskPydanticSpec, Response, Request
-
 from pydantic import BaseModel, Field
-
 import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
 spec = FlaskPydanticSpec('flask', title='Transportes UABJ')
 spec.register(app)
 
-
-
 class Localizacao(BaseModel):
-    latitude:int
-    longitude:int
+    latitude: int
+    longitude: int
+    Rota_ID: str
 
+class PosicoesUsuarios(BaseModel):
+    latitude: int
+    longitude: int
+    horario: datetime
+    Rota_ID: str
 
-@app.post('/')
+@app.route('/', methods=['POST'])
 @spec.validate(
-    body=Request(Localizacao), resp=Response(HTTP_201=Localizacao)
+    body=Request(Localizacao),
+    resp=Response(HTTP_201=Localizacao)
 )
 def receber_dados():
     try:
-        
-        body = request.context.body.dict() # Obtém os dados enviados pelo servidor Kotlin em formato JSON
+        body = request.context.body.dict()
         latitude = body['latitude']
         longitude = body['longitude']
+        Rota_ID = body['Rota_ID']
+        
+        horario = datetime.now()
 
         conn = sqlite3.connect('banco_de_dados.db')
         cursor = conn.cursor()
 
+        cursor.execute('''INSERT INTO PosicoesUsuarios (Latitude, Longitude, Horario, Rota_ID) 
+                          VALUES (?, ?, ?, ?)''',
+                       (latitude, longitude, horario, Rota_ID))
 
-        # Insere os dados na tabela
-        cursor.execute('''INSERT INTO PosicoesUsuarios (Latitude, Longitude) VALUES (?, ?)''',
-                       (latitude, longitude))
+        conn.commit()
+        conn.close()
 
-        conn.commit()  # Salva as alterações no banco de dados
-        conn.close()   # Fecha a conexão com o banco de dados
-
-        return jsonify(body)
+        return jsonify(body), 201
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
+
+@app.route('/rota_page/<int:latitude>/<int:longitude>/<string:Rota_ID>')
+def rota_page(latitude, longitude, Rota_ID):
+    return render_template('rota.html', latitude=latitude, longitude=longitude, Rota_ID=Rota_ID)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

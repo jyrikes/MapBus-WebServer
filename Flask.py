@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, redirect, request
-from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
 from flask_wtf import FlaskForm
@@ -9,7 +8,6 @@ from flask_bcrypt import Bcrypt
 import BancoDeDados as bd
 
 app = Flask(__name__, template_folder='templates')
-api = Api(app)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
@@ -23,26 +21,6 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-class Rota(Resource):
-    def get(self):
-        if request.is_json:
-            data = request.get_json()
-            hora = data.get('Hora', 'default_hora')
-            latitude = data.get('Latitude', 'default_latitude')
-            longitude = data.get('Longitude', 'default_longitude')
-            local = data.get('local', 'default_local')
-        else:
-            hora = request.args.get('Hora', 'default_hora')
-            latitude = request.args.get('Latitude', 'default_latitude')
-            longitude = request.args.get('Longitude', 'default_longitude')
-            local = request.args.get('local', 'default_local')
-        return render_template('rota.html', hora=hora, latitude=latitude, longitude=longitude, local=local)
-
-api.add_resource(Rota, "/rota")
-
-@app.route("/rota_page/<string:hora>/<string:latitude>/<string:longitude>/<string:local>")
-def rota_page(hora, latitude, longitude, local):
-    return render_template('rota.html', hora=hora, latitude=latitude, longitude=longitude, local=local)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
