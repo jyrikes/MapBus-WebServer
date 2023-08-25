@@ -8,6 +8,9 @@ app = Flask(__name__)
 spec = FlaskPydanticSpec('flask', title='Transportes UABJ')
 spec.register(app)
 
+@app.route('/adicionar_ponto')
+def adicionar_ponto():
+    return render_template('rottasFile.html')
 
 class Localizacao(BaseModel):
     latitude: float
