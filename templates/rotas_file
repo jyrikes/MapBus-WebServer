@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Ponto de Rota</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h2>Adicionar Ponto de Rota</h2>
+    <form id="locationForm">
+        <label for="latitude">Latitude:</label>
+        <input type="text" id="latitude" required>
+
+        <label for="longitude">Longitude:</label>
+        <input type="text" id="longitude" required>
+
+        <label for="horario">Horário:</label>
+        <input type="text" id="horario" required>
+
+        <label for="nome_ponto">Nome do Ponto:</label>
+        <input type="text" id="nome_ponto" required>
+
+        <label for="rota_id">ID da Rota:</label>
+        <input type="number" id="rota_id" required>
+
+        <input type="submit" value="Submeter">
+    </form>
+
+    <script>
+        document.getElementById('locationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                latitude: parseFloat(document.getElementById('latitude').value),
+                longitude: parseFloat(document.getElementById('longitude').value),
+                horario: document.getElementById('horario').value,
+                nome_ponto: document.getElementById('nome_ponto').value,
+                rota_id: parseInt(document.getElementById('rota_id').value)
+            };
+
+            axios.post('/server', data)
+            .then(response => {
+                console.log(response.data);
+                alert('Dados enviados com sucesso!');
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Ocorreu um erro ao enviar os dados.');
+            });
+        });
+    </script>
+</body>
+</html>
