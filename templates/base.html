@@ -4,100 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    {% block title %}{% endblock %}
     <link
       rel="stylesheet"
-      href="C:\Users\JYrik\Pictures\Projetos\Projeto---FGPT-main\static\css\base.css"
+      href="{{ url_for('static', filename='css/styles.css') }}"
     />
-    <style>
-      body {
-        display: flex;
-        margin: 0;
-      }
-
-      .sidebar {
-        width: 200px;
-        background-color: #15202b;
-        /* Azul escuro */
-        padding: 20px;
-        height: 100vh;
-        /* Ocupa toda a altura vertical da página */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        /* Centraliza os botões verticalmente */
-      }
-
-      .sidebar a {
-        display: block;
-        margin-bottom: 10px;
-        color: #ffffff;
-        /* Letras brancas */
-        text-decoration: none;
-        transition: background-color 0.3s;
-        /* Transição suave da cor de fundo */
-      }
-
-      .sidebar a:hover {
-        background-color: #007bff;
-        /* Azul claro quando passa o mouse */
-      }
-
-      .content {
-        flex: 1;
-        padding: 20px;
-      }
-
-      .route-box {
-        background-color: #007bff;
-        /* Azul claro */
-        color: #ffffff;
-        /* Letras brancas */
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 10px;
-      }
-
-      .carousel {
-        display: flex;
-        overflow-x: scroll;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        width: 100%;
-        padding-bottom: 20px;
-      }
-
-      .carousel-item {
-        flex: 0 0 300px;
-        height: 200px;
-        margin-right: 10px;
-        scroll-snap-align: start;
-      }
-
-      .path {
-        width: 100%;
-        height: 10px;
-        background-color: #f1f1f1;
-        border-radius: 5px;
-        overflow: hidden;
-        margin-top: 20px;
-      }
-
-      .path-inner {
-        width: 50%;
-        height: 100%;
-        background-color: #007bff;
-        /* Azul claro */
-      }
-    </style>
+    <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <div class="sidebar">
-      <a href="{{url_for('mapa')}}">Mapa</a>
-      <a href="{{url_for('rotas')}}">Rotas</a>
-      <a href="{{url_for('home')}}">Home</a>
-    </div>
-    <div class="content">{% block content %}{% endblock %}</div>
+    <nav class="sidebar">
+      <a href="{{ url_for('mapa') }}">Mapa</a>
+      <a href="{{ url_for('rotas') }}">Rotas</a>
+      <a href="{{ url_for('home') }}">Home</a>
+    </nav>
+    <main class="content">{% block content %}{% endblock %}</main>
   </body>
 </html>
