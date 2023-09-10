@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Informações de Rotas{% endblock %}
+{% block page_info %}Informações de Rotas{% endblock %}
+{% block content %}
+<div class="content">
+  <h1></h1>
+
+  <!-- Carrossel -->
+  <div class="carousel">
+    <!-- Itens do carrossel serão adicionados aqui -->
+  </div>
+  <!-- Botão para buscar dados -->
+  <button class="btn" id="fetch-button">Atualizar rotas</button>
+</div>
+{% endblock %}
+{% block scripts %}
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    // Função para adicionar um novo item ao carrossel
+    function addCarouselItem(data) {
+      const newItem = `
+                <div class="carousel-item" style="background-color: #007BFF;">
+                    <h3 class="route-title">${data.nome_ponto}</h3>
+                    <p class="route-schedule">Partida: ${data.horario}</p>
+                    <p class="route-schedule">Rota ID: ${data.rota_id}</p>
+                </div>
+            `;
+      $(".carousel").prepend(newItem);
+
+      // Remover o último item para manter um limite no número de itens
+      if ($(".carousel-item").length > 3) {
+        $(".carousel-item").last().remove();
+      }
+    }
+
+    // Verificar se há dados armazenados no localStorage quando a página é carregada
+    const storedData = localStorage.getItem("carrosselData");
+    if (storedData) {
+      const carrosselData = JSON.parse(storedData);
+      carrosselData.forEach(addCarouselItem);
+    }
+
+    // Evento de clique no botão de busca de dados
+    $("#fetch-button").click(function () {
+      $.post("/", function (data) {
+        // Suponho que a resposta da API seja um objeto JSON com as propriedades corretas
+        // Certifique-se de que a estrutura de dados corresponda à estrutura usada na função addCarouselItem
+        addCarouselItem(data);
+
+        // Armazenar os dados no localStorage
+        const storedData = localStorage.getItem("carrosselData");
+        const newData = {
+          nome_ponto: data.nome_ponto,
+          horario: data.horario,
+          rota_id: data.rota_id,
+        };
+        if (storedData) {
+          const carrosselData = JSON.parse(storedData);
+          carrosselData.unshift(newData);
+          localStorage.setItem("carrosselData", JSON.stringify(carrosselData));
+        } else {
+          localStorage.setItem("carrosselData", JSON.stringify([newData]));
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

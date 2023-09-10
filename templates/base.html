@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <title>{% block title %}{% endblock %}</title>
+
+
+  </head>
+  <body>
+    <header>
+      <!-- Espaço para "Transportes UABJ" -->
+      <div class="company-name">Transportes UABJ</div>
+      <!-- Espaço reservado para informações específicas da página -->
+      <div class="page-specific-info">{% block page_info %}{% endblock %}</div>
+    </header>
+    <!-- Botão para abrir a barra lateral -->
+    <button id="openMenu">Abrir Menu</button>
+    
+    <nav class="sidebar">
+      <!-- Botão para fechar a barra lateral -->
+      <button id="closeMenu">Fechar Menu</button>
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('mapa') }}">Mapa</a>
+      <a href="{{ url_for('rotas') }}">Rotas</a>
+      <a href="{{url_for('logout')}}">Sair</a>
+    </nav>
+    <main class="content">{% block content %}{% endblock %}</main>
+
+    {% block scripts %}
+    <!-- Aqui  incluir scripts específicos para cada página -->
+    {% endblock %}
+
+    <footer>
+      <!-- Aqui está o rodapé -->
+      <p> UABJ - UFRPE &copy; 2023</p>
+    </footer>
+
+    <!-- Scripts JavaScript aqui -->
+    <script>
+      // Função para abrir/fechar a barra lateral
+      function openMenu() {
+        var sidebar = document.querySelector('.sidebar');
+        sidebar.classList.add('open'); // Adiciona a classe 'open' para mostrar a barra lateral
+      }
+      
+      function closeMenu() {
+        var sidebar = document.querySelector('.sidebar');
+        sidebar.classList.remove('open'); // Remove a classe 'open' para ocultar a barra lateral
+      }
+
+      // Seleciona os botões e adiciona ouvintes de evento de clique
+      var openMenuButton = document.getElementById('openMenu');
+      openMenuButton.addEventListener('click', openMenu);
+      
+      var closeMenuButton = document.getElementById('closeMenu');
+      closeMenuButton.addEventListener('click', closeMenu);
+    </script>
+  </body>
+</html>

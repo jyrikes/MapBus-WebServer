@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Adicionar Ponto de Rota{% endblock %}
+{% block page_info %}Adicionar rotas{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{{ url_for('rotas') }}">
+    <label for="latitude">Latitude:</label>
+    <input type="text" name="latitude" required>
+
+    <label for="longitude">Longitude:</label>
+    <input type="text" name="longitude" required>
+
+    <label for="horario">Horário:</label>
+    <input type="text" name="horario" required>
+
+    <label for="nome_ponto">Nome do Ponto:</label>
+    <input type="text" name="nome_ponto" required>
+
+    <label for="rota_id">ID da Rota:</label>
+    <input type="number" name="rota_id" required>
+
+    <input type="submit" value="Submeter">
+</form>
+{% endblock %}

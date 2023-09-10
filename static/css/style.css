@@ -1,0 +1,275 @@
+﻿/* Reset some default styles */
+body, h1, ul {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  margin-bottom: 8vh;
+}
+
+/* Header styles */
+header {
+  background-color: #007BFF;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0; /* Preenche toda a largura */
+  z-index: 3; /* Coloca o cabeçalho na frente */
+}
+
+.company-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+/* Estilos para o botão "openMenu" */
+#openMenu {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 3; /* Coloca o botão na frente do conteúdo */
+}
+
+/* Estilos para o botão "closeMenu" */
+#closeMenu {
+ 
+  top: 10px;
+  left: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 1; /* Coloca o botão na frente do conteúdo */
+}
+
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #15202b;
+  padding-top: 20px;
+  color: white;
+  transition: left 0.3s ease;
+  z-index: 3;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  background-color: #007bff;
+}
+
+/* Content styles */
+.content {
+  margin-left: 120px;
+  padding: 30px;
+  flex: 1;
+  z-index: 1; /* Coloca o conteúdo na frente do rodapé */
+}
+
+/* Route box styles */
+.route-box {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+/* Carousel styles */
+.carousel {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  width: 120%; /* Aumente o tamanho geral do carrossel */
+  margin: 0 auto; /* Centralize horizontalmente */
+  padding-bottom: 20px;
+  background-color: #f5f5f5; /* Altere a cor de fundo do carrossel */
+  border-radius: 10px; /* Adicione bordas arredondadas */
+}
+
+.carousel-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px; /* Aumente a distância entre os elementos */
+}
+
+.carousel-item {
+  background-color: #007BFF;
+  color: white; /* Mude a cor da letra para branca */
+  padding: 20px;
+  border-radius: 5px;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  flex: 0 0 calc(33.33% - 20px); /* Divide igualmente em 3 itens */
+  cursor: pointer;
+  opacity: 0.7;
+  scroll-snap-align: start;
+}
+
+/* Estilize o primeiro elemento com uma cor de fundo mais escura */
+.carousel-item:first-child {
+  background-color: #042442; /* Azul mais escuro */
+}
+
+.carousel-item.active {
+  transform: scale(1.1); /* Destaque o primeiro item */
+  opacity: 1;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-item:hover {
+  transform: scale(1.05); /* Efeito de escala no hover */
+  opacity: 1;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Principal styles */
+
+.principal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  margin-top: 50px;
+  height: 100vh; 
+  flex-direction: column; /* Alinhar o conteúdo no centro verticalmente */
+}
+
+
+
+
+.options {
+  margin-top: 10px;
+}
+
+/* Search input and button styles */
+.search_input, .search_btn {
+  width: 40vw;
+  height: 6vh;
+  border-radius: 15px;
+  border-color: #000;
+  padding: 3px;
+}
+
+.search_btn {
+  width: 10vw;
+}
+
+.search_btn:hover {
+  background-color: #fff;
+}
+
+/* Map styles */
+#map {
+  width: 80vw;
+  height: 80vh;
+  margin: 10px;
+  background: #555;
+}
+
+/* Footer styles */
+footer {
+  
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #68727b;
+  color: #fff;
+  text-align: center;
+  padding: 1px 0;
+  z-index: 0; /* Coloca o rodapé atrás do conteúdo */
+}
+
+footer p {
+  font-weight: bold;
+}
+
+.copyright {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Form styles */
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+form input[type="text"],
+form input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+form input[type="submit"] {
+  background-color: #007BFF;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+.btn {
+  background-color: #007bff;
+  /* Botão azul */
+  color: #ffffff;
+  /* Letras brancas */
+  padding: 15px 30px;
+  /* Aumenta o tamanho do botão */
+  font-size: 18px;
+  /* Aumenta o tamanho da letra do botão */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  /* Cor azul mais escura quando o mouse passa por cima */
+}
+
