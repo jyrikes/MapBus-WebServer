@@ -16,20 +16,29 @@ O MapBus é um sistema web baseado em Python Flask que permite aos usuários aco
 
 Antes de começar, certifique-se de ter os seguintes requisitos instalados:
 
-- Python (versão X.X.X)
-- Flask (versão X.X.X)
-- Outras dependências, se houverem (listadas em requirements.txt)
+- Python 
+- Flask 
+
 
 ### Instalação
 
 1. Clone este repositório em sua máquina local:
 
    ```bash
-   git clone https://github.com/seu-usuario/mapBus.git
-
+   git@github.com:jyrikes/MapBus-WebServer.git
+   ```
+2. Instale o requirements.txt
+   ``` bash
+      pip install -r requirements.txt
+   
+### Link servidor 
+   ```bash
+   https://transporteuabj.pythonanywhere.com
+```
 ### Rotas da API
 1./user
-  > Get and Set 
+  > Get and Set
+```bash
     Localizacao{
             horario*	string
             title: Horario
@@ -40,9 +49,10 @@ Antes de começar, certifique-se de ter os seguintes requisitos instalados:
             rota_id*	integer
             title: Rota Id
 }
+```
 2. /server
   > Get and set
-    	
+```bash  	
 Response body
 Download
 Rota{
@@ -50,4 +60,5 @@ Rota{
   nome_ponto*: string,
   rota_id: INTEGER
 }
-  
+```
+
